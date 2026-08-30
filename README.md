@@ -6,9 +6,9 @@
 
 ## 2.项目创建
 
-### 2.1 数据库
+### 2.1 创建数据库
 
-在Navicat软件中导入 `big_event.sql` 文件。
+在Navicat软件中导入 `big_event.sql` 文件。（无需新建数据库，sql语句里已有创建语句）
 
 ### 2.2 创建 `SpringBoot` 工程
 
