@@ -3,6 +3,7 @@ package com.xq.controller;
 import com.xq.pojo.Result;
 import com.xq.pojo.User;
 import com.xq.service.UserService;
+import com.xq.utils.Md5Util;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,5 +31,21 @@ public class UserController {
             // 占用
             return Result.error("用户名已被占用");
         }
+    }
+
+    @PostMapping("/login")
+    public Result<String> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+        // 根据用户名查询用户
+        User loginUser = userService.findByUserName(username);
+        // 判断该用户是否存在
+        if (loginUser == null) {
+            return Result.error("用户名错误！");
+        }
+        // 判断密码是否正确（loginUser对象中的password是密文）
+        if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
+            // 登陆成功
+            return Result.success("jwt token令牌…");
+        }
+        return Result.error("密码错误！");
     }
 }

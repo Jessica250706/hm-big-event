@@ -24,6 +24,6 @@ public class UserServiceImpl implements UserService {
         // 加密密码
         String md5String = Md5Util.getMD5String(password);
         // 注册
-        userMapper.add(username, password);
+        userMapper.add(username, md5String);
     }
 }
