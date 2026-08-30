@@ -1,9 +1,12 @@
 package com.xq.pojo;
 
-
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+// lombok 在编译阶段，为实体类自动生成setter、getter、toString
+// 1）pom文件中引入依赖；2）在实体类上添加注解；
+@Data
 public class User {
     private Integer id;//主键ID
     private String username;//用户名
