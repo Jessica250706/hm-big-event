@@ -4,12 +4,11 @@ import com.xq.mapper.UserMapper;
 import com.xq.pojo.User;
 import com.xq.service.UserService;
 import com.xq.utils.Md5Util;
-import com.xq.utils.ThreadLocalUtil;
+import com.xq.utils.UserContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,8 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserName(String username) {
-        User user = userMapper.findByUserName(username);
-        return user;
+        return userMapper.findByUserName(username);
     }
 
     @Override
@@ -39,15 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateAvatar(String avatarUrl) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer id = (Integer) map.get("id");
+        Integer id = UserContextUtil.getCurrentUserId();
         userMapper.updateAvatar(avatarUrl, id);
     }
 
     @Override
     public void updatePwd(String newPwd) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer id = (Integer) map.get("id");
+        Integer id = UserContextUtil.getCurrentUserId();
         userMapper.updatePwd(Md5Util.getMD5String(newPwd), id);
     }
 }
