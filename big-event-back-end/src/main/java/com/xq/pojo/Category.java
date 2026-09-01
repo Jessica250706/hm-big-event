@@ -1,5 +1,6 @@
 package com.xq.pojo;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,11 +15,13 @@ public class Category {
     /*
     * 分类名称
     * */
+    @NotEmpty
     private String categoryName;
 
     /*
     * 分类别名
     * */
+    @NotEmpty
     private String categoryAlias;
 
     /*
