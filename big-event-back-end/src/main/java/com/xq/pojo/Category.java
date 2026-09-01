@@ -2,6 +2,7 @@ package com.xq.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public class Category {
     /*
     * 主键ID
     * */
+    @NotNull
     private Integer id;
 
     /*
