@@ -3,6 +3,7 @@ package com.xq.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.Default;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class Category {
     /*
     * 主键ID
     * */
-    @NotNull
+    @NotNull(groups = Update.class)
     private Integer id;
 
     /*
@@ -43,4 +44,15 @@ public class Category {
     * */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
+
+    // 如果说某个校验项没有指定分组，则默认属于 Default 分组
+    // 分组之间可以继承，A extends B，则 A 中拥有 B 中所有的校验项
+
+    public interface Add extends Default {
+
+    }
+
+    public interface Update extends Default {
+
+    }
 }
