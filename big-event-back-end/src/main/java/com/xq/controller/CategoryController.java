@@ -27,4 +27,10 @@ public class CategoryController {
         List<Category> categories = categoryService.list();
         return Result.success(categories);
     }
+
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id) {
+        Category category = categoryService.findById(id);
+        return Result.success(category);
+    }
 }

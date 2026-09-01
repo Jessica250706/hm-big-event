@@ -10,4 +10,7 @@ public interface CategoryService {
 
     // 列表查询
     List<Category> list();
+
+    // 根据 id 查询分类信息
+    Category findById(Integer id);
 }
