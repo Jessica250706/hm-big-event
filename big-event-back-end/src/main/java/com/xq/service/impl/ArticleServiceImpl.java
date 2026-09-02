@@ -69,4 +69,13 @@ public class ArticleServiceImpl implements ArticleService {
             throw new RuntimeException("文章不存在或无权修改");
         }
     }
+
+    @Override
+    public void delete(Integer id) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        int rows = articleMapper.delete(id, userId);
+        if (rows == 0) {
+            throw new RuntimeException("文章不存在或无权删除");
+        }
+    }
 }

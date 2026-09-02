@@ -1,10 +1,7 @@
 package com.xq.mapper;
 
 import com.xq.pojo.Article;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -26,4 +23,8 @@ public interface ArticleMapper {
     @Update("update article set title = #{title}, content = #{content}, cover_img = #{coverImg}, state = #{state}, " +
             "category_id = #{categoryId}, update_time = #{updateTime} where id = #{id} and create_user = #{createUser}")
     int update(Article article);
+
+    // 删除文章
+    @Delete("delete from article where id = #{id} and create_user = #{userId}")
+    int delete(Integer id, Integer userId);
 }
