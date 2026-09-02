@@ -3,6 +3,7 @@ package com.xq.mapper;
 import com.xq.pojo.Article;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -15,4 +16,8 @@ public interface ArticleMapper {
 
     // 条件分页列表查询
     List<Article> list(Integer userId, Integer categoryId, String state);
+
+    // 根据 id 查询文章信息
+    @Select("select * from article where id = #{id} and create_user = #{userId};")
+    Article findById(Integer id, Integer userId);
 }

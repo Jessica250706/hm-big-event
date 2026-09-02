@@ -9,4 +9,7 @@ public interface ArticleService {
 
     // 条件分页列表查询
     PageBean<Article> list(Integer pageNum, Integer pageSize, Integer categoryId, String state);
+
+    // 根据 id 查询文章信息
+    Article findById(Integer id);
 }

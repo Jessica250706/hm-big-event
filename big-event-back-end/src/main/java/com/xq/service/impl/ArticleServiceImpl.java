@@ -48,4 +48,14 @@ public class ArticleServiceImpl implements ArticleService {
 
         return pageBean;
     }
+
+    @Override
+    public Article findById(Integer id) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        Article article = articleMapper.findById(id, userId);
+        if (article == null) {
+            throw new RuntimeException("文章不存在或无权查看");
+        }
+        return article;
+    }
 }
