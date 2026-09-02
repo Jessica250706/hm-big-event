@@ -19,7 +19,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping
-    public Result add(@RequestBody Article article) {
+    public Result add(@RequestBody @Validated Article article) {
         articleService.add(article);
         return Result.success();
     }
