@@ -4,6 +4,7 @@ import com.xq.pojo.Article;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -20,4 +21,9 @@ public interface ArticleMapper {
     // 根据 id 查询文章信息
     @Select("select * from article where id = #{id} and create_user = #{userId};")
     Article findById(Integer id, Integer userId);
+
+    // 更新文章
+    @Update("update article set title = #{title}, content = #{content}, cover_img = #{coverImg}, state = #{state}, " +
+            "category_id = #{categoryId}, update_time = #{updateTime} where id = #{id} and create_user = #{createUser}")
+    int update(Article article);
 }

@@ -58,4 +58,15 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return article;
     }
+
+    @Override
+    public void update(Article article) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        article.setCreateUser(userId);
+        article.setUpdateTime(LocalDateTime.now());
+        int rows = articleMapper.update(article);
+        if (rows == 0) {
+            throw new RuntimeException("文章不存在或无权修改");
+        }
+    }
 }
