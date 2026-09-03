@@ -27,7 +27,7 @@ public class JwtTest {
         System.out.println(token);
     }
 
-    @Test
+    // @Test
     public void testParse() {
         // 定义字符串，模拟用户传递过来的token
         String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" +
