@@ -35,7 +35,9 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button class="button" type="primary" auto-insert-space>注册</el-button>
+          <el-button class="button" type="primary" auto-insert-space @click="register">
+            注册
+          </el-button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false">← 返回</el-link>
@@ -73,6 +75,7 @@
 import { reactive, ref } from 'vue'
 import type { FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
+import { userRegisterService } from '@/api/user'
 
 interface RegisterData {
   username: string
@@ -110,6 +113,16 @@ const rules = reactive<FormRules<RegisterData>>({
   ],
   rePassword: [{ validator: checkRePassword, trigger: 'blur' }],
 })
+
+// 调用后台接口，完成注册
+async function register() {
+  const result = await userRegisterService(registerData)
+  if (result.code === 0) {
+    alert(result.message ? result.message : '注册成功')
+  } else {
+    alert('注册失败')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
