@@ -8,5 +8,5 @@ export const userRegisterService = (registerData: any): Promise<ApiResponse> => 
     params.append(key, registerData[key])
   }
   // 显式取出 response.data，类型自动推导为 ApiResponse
-  return request.post('/user/register', params).then((response) => response.data)
+  return request.post('/user/register', params)
 }
