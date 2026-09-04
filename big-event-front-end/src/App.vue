@@ -1,8 +1,10 @@
 <template>
-  <div>Hello World!</div>
+  <Login />
 </template>
 
-<script setup></script>
+<script setup>
+import Login from './views/Login.vue'
+</script>
 
 <style>
 #app {
