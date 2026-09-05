@@ -26,3 +26,10 @@ export const addArticleCategoryService = (
 ): Promise<ApiResponse> => {
   return request.post('/category', categoryData)
 }
+
+// 修改文章分类
+export const editArticleCategoryService = (
+  categoryData: addArticleCategoryDTO,
+): Promise<ApiResponse> => {
+  return request.put('/category', categoryData)
+}

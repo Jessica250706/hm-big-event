@@ -40,7 +40,12 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="addArticleCategory">确认</el-button>
+          <el-button
+            type="primary"
+            @click="title === '添加分类' ? addArticleCategory() : editArticleCategory()"
+          >
+            确认
+          </el-button>
         </span>
       </template>
     </el-dialog>
@@ -51,7 +56,11 @@
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { articleCategoryListService, addArticleCategoryService } from '@/api/article'
+import {
+  articleCategoryListService,
+  addArticleCategoryService,
+  editArticleCategoryService,
+} from '@/api/article'
 import type { articleCategoryDTO, addArticleCategoryDTO } from '@/api/article'
 
 const dialogVisible = ref(false)
@@ -77,16 +86,6 @@ const clearCategoryModel = () => {
   categoryModel.value.categoryName = ''
 }
 
-const addArticleCategory = async () => {
-  const { message } = await addArticleCategoryService(categoryModel.value)
-  ElMessage.success(message ? message : '添加成功')
-  // 刷新
-  getArticleCategoryList()
-  // 关闭弹窗
-  dialogVisible.value = false
-  clearCategoryModel()
-}
-
 const showAddDialog = () => {
   dialogVisible.value = true
   title.value = '添加分类'
@@ -100,6 +99,26 @@ const showEditDialog = (row: any) => {
   categoryModel.value.categoryName = row.categoryName
   categoryModel.value.categoryAlias = row.categoryAlias
   categoryModel.value.id = row.id
+}
+
+const addArticleCategory = async () => {
+  const { message } = await addArticleCategoryService(categoryModel.value)
+  ElMessage.success(message ? message : '添加成功')
+  // 刷新
+  getArticleCategoryList()
+  // 关闭弹窗
+  dialogVisible.value = false
+  clearCategoryModel()
+}
+
+const editArticleCategory = async () => {
+  const { message } = await editArticleCategoryService(categoryModel.value)
+  ElMessage.success(message ? message : '修改成功')
+  // 刷新
+  getArticleCategoryList()
+  // 关闭弹窗
+  dialogVisible.value = false
+  clearCategoryModel()
 }
 
 onMounted(() => {
