@@ -81,6 +81,7 @@
 import { reactive, ref } from 'vue'
 import type { FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { userRegisterService, userLoginService } from '@/api/user'
 
 interface RegisterData {
@@ -131,21 +132,13 @@ const rules = reactive<FormRules<RegisterData>>({
 // 调用后台接口，完成注册
 async function register() {
   const result = await userRegisterService(registerData)
-  if (result.code === 0) {
-    alert(result.message ? result.message : '注册成功')
-  } else {
-    alert('注册失败')
-  }
+  ElMessage.success(result.message ? result.message : '注册成功')
 }
 
 // 调用后台接口，完成登录
 async function login() {
   const result = await userLoginService(loginData)
-  if (result.code === 0) {
-    alert(result.message ? result.message : '登录成功')
-  } else {
-    alert('登录失败')
-  }
+  ElMessage.success(result.message ? result.message : '登录成功')
 }
 </script>
 
