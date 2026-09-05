@@ -44,15 +44,21 @@
         </el-form-item>
       </el-form>
       <!-- 登录 -->
-      <el-form v-if="!isRegister" ref="form" size="large">
+      <el-form v-if="!isRegister" ref="form" size="large" :model="loginData" :rules="rules">
         <el-form-item>
           <h1>登录</h1>
         </el-form-item>
-        <el-form-item>
-          <el-input :prefix-icon="User" placeholder="请输入用户名" />
+        <el-form-item prop="username">
+          <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="loginData.username" />
         </el-form-item>
-        <el-form-item>
-          <el-input :prefix-icon="Lock" placeholder="请输入密码" type="password" show-password />
+        <el-form-item prop="password">
+          <el-input
+            :prefix-icon="Lock"
+            placeholder="请输入密码"
+            type="password"
+            show-password
+            v-model="loginData.password"
+          />
         </el-form-item>
         <el-form-item class="flex">
           <div class="flex">
@@ -61,7 +67,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button class="button" type="primary" auto-insert-space>登录</el-button>
+          <el-button class="button" type="primary" auto-insert-space @click="login">登录</el-button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true">注册 →</el-link>
@@ -75,12 +81,16 @@
 import { reactive, ref } from 'vue'
 import type { FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { userRegisterService } from '@/api/user'
+import { userRegisterService, userLoginService } from '@/api/user'
 
 interface RegisterData {
   username: string
   password: string
   rePassword: string
+}
+interface LoginData {
+  username: string
+  password: string
 }
 
 // 控制注册与登录表单的显示，默认显示登录
@@ -89,6 +99,10 @@ const registerData = reactive<RegisterData>({
   username: '',
   password: '',
   rePassword: '',
+})
+const loginData = reactive<LoginData>({
+  username: '',
+  password: '',
 })
 
 function checkRePassword(rule: any, value: any, callback: any) {
@@ -121,6 +135,16 @@ async function register() {
     alert(result.message ? result.message : '注册成功')
   } else {
     alert('注册失败')
+  }
+}
+
+// 调用后台接口，完成登录
+async function login() {
+  const result = await userLoginService(loginData)
+  if (result.code === 0) {
+    alert(result.message ? result.message : '登录成功')
+  } else {
+    alert('登录失败')
   }
 }
 </script>
