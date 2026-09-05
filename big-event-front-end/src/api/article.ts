@@ -10,6 +10,7 @@ export interface articleCategoryDTO {
 }
 
 export interface addArticleCategoryDTO {
+  id?: number
   categoryName: string
   categoryAlias: string
 }

@@ -4,17 +4,7 @@
       <div class="header">
         <span>文章分类</span>
         <div class="extra">
-          <el-button
-            type="primary"
-            @click="
-              () => {
-                dialogVisible = true
-                clearCategoryModel()
-              }
-            "
-          >
-            添加分类
-          </el-button>
+          <el-button type="primary" @click="showAddDialog">添加分类</el-button>
         </div>
       </div>
     </template>
@@ -24,7 +14,7 @@
       <el-table-column label="分类别名" prop="categoryAlias" />
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
-          <el-button :icon="Edit" circle plain type="primary" />
+          <el-button :icon="Edit" circle plain type="primary" @click="showEditDialog(row)" />
           <el-button :icon="Delete" circle plain type="danger" />
         </template>
       </el-table-column>
@@ -65,6 +55,7 @@ import { articleCategoryListService, addArticleCategoryService } from '@/api/art
 import type { articleCategoryDTO, addArticleCategoryDTO } from '@/api/article'
 
 const dialogVisible = ref(false)
+const title = ref<string>('')
 const categories = ref<articleCategoryDTO[]>([])
 const categoryModel = ref<addArticleCategoryDTO>({
   categoryName: '',
@@ -94,6 +85,21 @@ const addArticleCategory = async () => {
   // 关闭弹窗
   dialogVisible.value = false
   clearCategoryModel()
+}
+
+const showAddDialog = () => {
+  dialogVisible.value = true
+  title.value = '添加分类'
+  clearCategoryModel()
+}
+
+const showEditDialog = (row: any) => {
+  dialogVisible.value = true
+  title.value = '修改分类'
+  // 数据拷贝
+  categoryModel.value.categoryName = row.categoryName
+  categoryModel.value.categoryAlias = row.categoryAlias
+  categoryModel.value.id = row.id
 }
 
 onMounted(() => {
