@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
+import router from '@/router'
 import { useTokenStore } from '@/stores/token'
 
 // 定义统一响应结构（导出供外部使用）
@@ -44,7 +45,12 @@ instance.interceptors.response.use(
     return Promise.reject(data)
   },
   (err) => {
-    ElMessage.error('服务异常')
+    if (err.response.status === 401) {
+      ElMessage.error('请先登录')
+      router.push('/login')
+    } else {
+      ElMessage.error('服务异常')
+    }
     return Promise.reject(err) // 异步的状态转化成失败的状态
   },
 )
