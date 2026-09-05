@@ -94,8 +94,8 @@ import avatar from '@/assets/default.png'
 </script>
 
 <style lang="scss" scoped>
-.layout {
-  height: 100%;
+.layout-container {
+  height: 100vh;
 
   .el-aside {
     background-color: #232323;

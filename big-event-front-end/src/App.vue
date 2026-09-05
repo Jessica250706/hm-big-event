@@ -1,12 +1,8 @@
 <template>
-  <Login />
-  <Layout />
+  <router-view />
 </template>
 
-<script setup>
-import Login from './views/Login.vue'
-import Layout from './layout/index.vue'
-</script>
+<script setup></script>
 
 <style>
 #app {

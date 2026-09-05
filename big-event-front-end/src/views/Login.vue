@@ -82,6 +82,7 @@ import { reactive, ref } from 'vue'
 import type { FormRules } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 import { userRegisterService, userLoginService } from '@/api/user'
 
 interface RegisterData {
@@ -105,6 +106,8 @@ const loginData = reactive<LoginData>({
   username: '',
   password: '',
 })
+
+const router = useRouter()
 
 function checkRePassword(rule: any, value: any, callback: any) {
   if (value === '') {
@@ -139,6 +142,8 @@ async function register() {
 async function login() {
   const result = await userLoginService(loginData)
   ElMessage.success(result.message ? result.message : '登录成功')
+  // 借助路由跳转到首页
+  router.push('/')
 }
 </script>
 
