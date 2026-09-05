@@ -12,10 +12,5 @@ export interface articleDTO {
 
 // 文章分类列表查询
 export const articleCategoryListService = (): Promise<ApiResponse<articleDTO[]>> => {
-  const tokenStore = useTokenStore()
-  return request.get('/category', {
-    headers: {
-      Authorization: tokenStore.token,
-    },
-  })
+  return request.get('/category')
 }

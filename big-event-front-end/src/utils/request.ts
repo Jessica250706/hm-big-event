@@ -1,9 +1,7 @@
-// 定制请求的实例
-
-// 导入axios  npm install axios
 import axios from 'axios'
 import type { AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
+import { useTokenStore } from '@/stores/token'
 
 // 定义统一响应结构（导出供外部使用）
 export interface ApiResponse<T = any> {
@@ -15,6 +13,23 @@ export interface ApiResponse<T = any> {
 // 定义一个变量，记录公共的前缀，baseURL
 const baseURL = '/api'
 const instance = axios.create({ baseURL })
+
+// 添加请求拦截器
+instance.interceptors.request.use(
+  (config) => {
+    // 请求前的回调，添加 token
+    const tokenStore = useTokenStore()
+    // 判断有没有 token
+    if (tokenStore.token) {
+      config.headers.Authorization = tokenStore.token
+    }
+    return config
+  },
+  (err) => {
+    // 请求错误的回调
+    Promise.reject(err)
+  },
+)
 
 // 添加响应拦截器
 instance.interceptors.response.use(
