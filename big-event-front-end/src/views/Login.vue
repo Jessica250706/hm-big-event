@@ -84,6 +84,7 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { userRegisterService, userLoginService } from '@/api/user'
+import { useTokenStore } from '@/stores/token'
 
 interface RegisterData {
   username: string
@@ -108,6 +109,7 @@ const loginData = reactive<LoginData>({
 })
 
 const router = useRouter()
+const tokenStore = useTokenStore()
 
 function checkRePassword(rule: any, value: any, callback: any) {
   if (value === '') {
@@ -141,6 +143,7 @@ async function register() {
 // 调用后台接口，完成登录
 async function login() {
   const result = await userLoginService(loginData)
+  tokenStore.setToken(result.data)
   ElMessage.success(result.message ? result.message : '登录成功')
   // 借助路由跳转到首页
   router.push('/')
