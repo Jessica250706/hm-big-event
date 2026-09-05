@@ -33,3 +33,8 @@ export const editArticleCategoryService = (
 ): Promise<ApiResponse> => {
   return request.put('/category', categoryData)
 }
+
+// 删除文章分类
+export const deleteArticleCategoryService = (id: number): Promise<ApiResponse> => {
+  return request.delete('/category?id=' + id)
+}

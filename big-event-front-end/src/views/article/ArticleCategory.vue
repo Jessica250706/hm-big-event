@@ -15,7 +15,13 @@
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
           <el-button :icon="Edit" circle plain type="primary" @click="showEditDialog(row)" />
-          <el-button :icon="Delete" circle plain type="danger" />
+          <el-button
+            :icon="Delete"
+            circle
+            plain
+            type="danger"
+            @click="deleteArticleCategory(row.id)"
+          />
         </template>
       </el-table-column>
       <template #empty>
@@ -55,11 +61,12 @@
 <script lang="ts" setup>
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   articleCategoryListService,
   addArticleCategoryService,
   editArticleCategoryService,
+  deleteArticleCategoryService,
 } from '@/api/article'
 import type { articleCategoryDTO, addArticleCategoryDTO } from '@/api/article'
 
@@ -119,6 +126,24 @@ const editArticleCategory = async () => {
   // 关闭弹窗
   dialogVisible.value = false
   clearCategoryModel()
+}
+
+const deleteArticleCategory = (id: number) => {
+  // 弹窗
+  ElMessageBox.confirm('确认要删除该分类吗？', '温馨提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await deleteArticleCategoryService(id)
+      ElMessage.success('删除成功')
+      // 刷新
+      getArticleCategoryList()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
 }
 
 onMounted(() => {
