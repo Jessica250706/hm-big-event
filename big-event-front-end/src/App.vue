@@ -1,9 +1,11 @@
 <template>
   <Login />
+  <Layout />
 </template>
 
 <script setup>
 import Login from './views/Login.vue'
+import Layout from './layout/index.vue'
 </script>
 
 <style>
