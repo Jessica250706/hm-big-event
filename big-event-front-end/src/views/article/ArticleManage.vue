@@ -27,8 +27,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">搜索</el-button>
-        <el-button>重置</el-button>
+        <el-button type="primary" @click="getArticleList">搜索</el-button>
+        <el-button @click="resetSearchItems">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 文章列表 -->
@@ -88,15 +88,25 @@ const pageHelper = ref({
 // 当每页条数发生变化
 const onSizeChange = (size: number) => {
   pageHelper.value.pageSize = size
+  getArticleList()
 }
 // 当前页码发生变化，调用此函数
 const onCurrentChange = (num: number) => {
   pageHelper.value.pageNum = num
+  getArticleList()
 }
 
 const getArticleCategoryList = async () => {
   const result = await articleCategoryListService()
   categories.value = result.data
+}
+
+const resetSearchItems = () => {
+  // 清空
+  searchParam.value.categoryId = null
+  searchParam.value.state = ''
+  // 刷新
+  getArticleList()
 }
 
 const getArticleList = async () => {
