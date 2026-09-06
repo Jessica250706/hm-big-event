@@ -52,7 +52,9 @@
           黑马程序员：
           <strong>{{ userInfoStore.info.nickname }}</strong>
         </div>
-        <el-dropdown placement="bottom-end">
+        <!-- 下拉菜单 -->
+        <!-- command：条目被点击后会触发，在事件函数上可以声明一个参数，接收条目对应的指令 -->
+        <el-dropdown placement="bottom-end" @command="handleCommand">
           <span class="el-dropdown__box">
             <el-avatar :src="userInfoStore.info.userPic ?? avatar" />
             <el-icon>
@@ -61,9 +63,9 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile" :icon="User">基本资料</el-dropdown-item>
+              <el-dropdown-item command="info" :icon="User">基本资料</el-dropdown-item>
               <el-dropdown-item command="avatar" :icon="Crop">更换头像</el-dropdown-item>
-              <el-dropdown-item command="password" :icon="EditPen">重置密码</el-dropdown-item>
+              <el-dropdown-item command="resetPassword" :icon="EditPen">重置密码</el-dropdown-item>
               <el-dropdown-item command="logout" :icon="SwitchButton">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -92,13 +94,46 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import useUserInfoStore from '@/stores/userInfo'
+import { useTokenStore } from '@/stores/token'
 import { userInfoService } from '@/api/user'
 import { onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 const userInfoStore = useUserInfoStore()
+const tokenStore = useTokenStore()
 const getUserInfo = async () => {
   const { data } = await userInfoService()
   userInfoStore.setInfo(data)
+}
+
+const router = useRouter()
+
+const handleCommand = (command: string | number | object) => {
+  if (command === 'logout') {
+    // 退出登录
+
+    // 弹窗
+    ElMessageBox.confirm('确认要退出登录吗？', '温馨提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+      .then(() => {
+        // 1.清空 pinia 中存储的 token 以及个人信息
+        tokenStore.removeToken()
+        userInfoStore.removeInfo()
+        // 2.跳转到登录页面
+        router.push('/login')
+        ElMessage.success('退出登录成功')
+      })
+      .catch(() => {
+        ElMessage.info('用户取消了退出登录')
+      })
+  } else {
+    // 路由
+    router.push('/user/' + command)
+  }
 }
 
 onMounted(() => {
