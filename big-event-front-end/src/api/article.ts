@@ -84,3 +84,8 @@ export const articleDetailService = (id: number): Promise<ApiResponse<articleDTO
 export const editArticleService = (articleData: articleDTO): Promise<ApiResponse> => {
   return request.put('/article', articleData)
 }
+
+// 删除文章
+export const deleteArticleService = (id: number): Promise<ApiResponse> => {
+  return request.delete('/article?id=' + id)
+}

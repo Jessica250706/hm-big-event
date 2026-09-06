@@ -39,14 +39,8 @@
       <el-table-column label="状态" prop="state"></el-table-column>
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
-          <el-button
-            :icon="Edit"
-            circle
-            plain
-            type="primary"
-            @click="openEditDrawer(row.id)"
-          ></el-button>
-          <el-button :icon="Delete" circle plain type="danger"></el-button>
+          <el-button :icon="Edit" circle plain type="primary" @click="openEditDrawer(row.id)" />
+          <el-button :icon="Delete" circle plain type="danger" @click="deleteArticle(row.id)" />
         </template>
       </el-table-column>
       <template #empty>
@@ -78,8 +72,9 @@
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
 import AddArticleDrawer from './components/AddArticleDrawer.vue'
-import { articleCategoryListService, articleListService } from '@/api/article'
+import { articleCategoryListService, articleListService, deleteArticleService } from '@/api/article'
 import type { articleCategoryDTO, articleDTO } from '@/api/article'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 type AddArticleDrawerInstance = InstanceType<typeof AddArticleDrawer>
 
@@ -120,6 +115,23 @@ const openAddDrawer = () => {
 const openEditDrawer = (id: number) => {
   articleDrawer.value?.resetArticle()
   articleDrawer.value?.openDrawer('修改文章', id)
+}
+
+const deleteArticle = (id: number) => {
+  ElMessageBox.confirm('确认要删除该文章吗？', '温馨提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await deleteArticleService(id)
+      ElMessage.success('删除成功')
+      // 刷新
+      getArticleList()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
 }
 
 const getArticleCategoryList = async () => {

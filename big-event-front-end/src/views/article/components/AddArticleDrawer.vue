@@ -103,10 +103,7 @@ const addArticle = async (clickState: string) => {
 
 const getArticleDetail = async (id: number) => {
   const { data } = await articleDetailService(id)
-  articleModel.value = {
-    ...data,
-    categoryId: data.categoryId,
-  }
+  articleModel.value = data
 }
 
 const openDrawer = (title: DrawerMode, id?: number) => {
