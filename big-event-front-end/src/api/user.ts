@@ -12,6 +12,12 @@ export interface userInfoDTO {
   updateTime?: string
 }
 
+export interface pwdDataDTO {
+  oldPwd: string
+  newPwd: string
+  rePwd: string
+}
+
 // 用户注册
 export const userRegisterService = (registerData: any): Promise<ApiResponse> => {
   const params = new URLSearchParams()
@@ -45,4 +51,14 @@ export const updateUserAvatarService = (avatarUrl: string): Promise<ApiResponse>
   const params = new URLSearchParams()
   params.append('avatarUrl', avatarUrl)
   return request.patch('/user/updateAvatar', params)
+}
+
+// 修改密码
+export const updateUserPasswordService = (pwdData: pwdDataDTO): Promise<ApiResponse> => {
+  const params = {
+    old_pwd: pwdData.oldPwd,
+    new_pwd: pwdData.newPwd,
+    re_pwd: pwdData.rePwd,
+  }
+  return request.patch('/user/updatePwd', params)
 }
