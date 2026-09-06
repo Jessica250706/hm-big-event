@@ -2,6 +2,7 @@ package com.xq.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xq.dto.ArticleDTO;
 import com.xq.mapper.ArticleMapper;
 import com.xq.pojo.Article;
 import com.xq.pojo.PageBean;
@@ -29,18 +30,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageBean<Article> list(Integer pageNum, Integer pageSize, Integer categoryId, String state) {
+    public PageBean<ArticleDTO> list(Integer pageNum, Integer pageSize, Integer categoryId, String state) {
         // 1.创建 PageBean 对象
-        PageBean<Article> pageBean = new PageBean<>();
+        PageBean<ArticleDTO> pageBean = new PageBean<>();
 
         // 2.开启分页查询
         PageHelper.startPage(pageNum, pageSize);
 
         // 3.调用 mapper 完成查询
         Integer userId = UserContextUtil.getCurrentUserId();
-        List<Article> as = articleMapper.list(userId, categoryId, state);
+        List<ArticleDTO> as = articleMapper.list(userId, categoryId, state);
         // Page 中提供了方法，可以获取 PageHelper 分页查询后，得到的总记录条数和当前页数据
-        Page<Article> p = (Page<Article>) as;
+        Page<ArticleDTO> p = (Page<ArticleDTO>) as;
 
         // 4.把数据填充到 PageBean 对象中
         pageBean.setTotal(p.getTotal());

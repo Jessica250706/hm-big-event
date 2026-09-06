@@ -1,5 +1,6 @@
 package com.xq.mapper;
 
+import com.xq.dto.ArticleDTO;
 import com.xq.pojo.Article;
 import org.apache.ibatis.annotations.*;
 
@@ -13,7 +14,7 @@ public interface ArticleMapper {
     void add(Article article);
 
     // 条件分页列表查询
-    List<Article> list(Integer userId, Integer categoryId, String state);
+    List<ArticleDTO> list(Integer userId, Integer categoryId, String state);
 
     // 根据 id 查询文章信息
     @Select("select * from article where id = #{id} and create_user = #{userId};")

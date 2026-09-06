@@ -34,7 +34,7 @@
     <!-- 文章列表 -->
     <el-table :data="articles" style="width: 100%">
       <el-table-column label="文章标题" width="400" prop="title"></el-table-column>
-      <el-table-column label="分类" prop="categoryId"></el-table-column>
+      <el-table-column label="分类" prop="categoryName"></el-table-column>
       <el-table-column label="发表时间" prop="createTime"></el-table-column>
       <el-table-column label="状态" prop="state"></el-table-column>
       <el-table-column label="操作" width="100">
@@ -65,52 +65,18 @@
 <script lang="ts" setup>
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
-import { articleCategoryListService } from '@/api/article'
+import { articleCategoryListService, articleListService } from '@/api/article'
 import type { articleCategoryDTO, articleDTO } from '@/api/article'
 
 // 文章分类数据模型
 const categories = ref<articleCategoryDTO[]>([])
 // 搜索框数据
 const searchParam = ref({
-  categoryId: '', // 用户搜索时选中的分类id
+  categoryId: null as number | null, // 用户搜索时选中的分类id
   state: '', // 用户搜索时选中的发布状态
 })
 // 文章列表数据模型
-const articles = ref([
-  {
-    id: 5,
-    title: '陕西旅游攻略333',
-    content: '兵马俑,华清池,法门寺,华山...爱去哪去哪...',
-    coverImg:
-      'https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png',
-    state: '草稿',
-    categoryId: 2,
-    createTime: '2023-09-03 11:55:30',
-    updateTime: '2023-09-03 11:55:30',
-  },
-  {
-    id: 5,
-    title: '陕西旅游攻略222',
-    content: '兵马俑,华清池,法门寺,华山...爱去哪去哪...',
-    coverImg:
-      'https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png',
-    state: '草稿',
-    categoryId: 2,
-    createTime: '2023-09-03 11:55:30',
-    updateTime: '2023-09-03 11:55:30',
-  },
-  {
-    id: 5,
-    title: '陕西旅游攻略11',
-    content: '兵马俑,华清池,法门寺,华山...爱去哪去哪...',
-    coverImg:
-      'https://big-event-gwd.oss-cn-beijing.aliyuncs.com/9bf1cf5b-1420-4c1b-91ad-e0f4631cbed4.png',
-    state: '草稿',
-    categoryId: 2,
-    createTime: '2023-09-03 11:55:30',
-    updateTime: '2023-09-03 11:55:30',
-  },
-])
+const articles = ref<articleDTO[]>([])
 
 // 分页条数据模型
 const pageHelper = ref({
@@ -133,8 +99,21 @@ const getArticleCategoryList = async () => {
   categories.value = result.data
 }
 
+const getArticleList = async () => {
+  const params = {
+    pageNum: pageHelper.value.pageNum,
+    pageSize: pageHelper.value.pageSize,
+    categoryId: searchParam.value.categoryId ?? undefined,
+    state: searchParam.value.state.length !== 0 ? searchParam.value.state : undefined,
+  }
+  const { data } = await articleListService(params)
+  pageHelper.value.total = data.total
+  articles.value = data.items
+}
+
 onMounted(() => {
   getArticleCategoryList()
+  getArticleList()
 })
 </script>
 

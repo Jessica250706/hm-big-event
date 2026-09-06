@@ -1,5 +1,6 @@
 package com.xq.controller;
 
+import com.xq.dto.ArticleDTO;
 import com.xq.pojo.Article;
 import com.xq.pojo.PageBean;
 import com.xq.pojo.Result;
@@ -23,13 +24,13 @@ public class ArticleController {
     }
 
     @GetMapping
-    public Result<PageBean<Article>> list(
+    public Result<PageBean<ArticleDTO>> list(
             Integer pageNum,
             Integer pageSize,
             @RequestParam(required = false) Integer categoryId,
             @RequestParam(required = false) String state
     ) {
-        PageBean<Article> pb = articleService.list(pageNum, pageSize, categoryId, state);
+        PageBean<ArticleDTO> pb = articleService.list(pageNum, pageSize, categoryId, state);
         return Result.success(pb);
     }
 

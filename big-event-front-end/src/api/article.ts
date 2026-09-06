@@ -15,6 +15,18 @@ export interface addArticleCategoryDTO {
   categoryAlias: string
 }
 
+export interface articleSearchItem {
+  pageNum: number
+  pageSize: number
+  categoryId?: number
+  state?: string
+}
+
+export interface articleListDTO {
+  total: number
+  items: articleDTO[]
+}
+
 export interface articleDTO {
   id: number
   title: string
@@ -22,6 +34,7 @@ export interface articleDTO {
   coverImg: string
   state: string
   categoryId: number
+  categoryName?: string
   createTime?: string
   updateTime?: string
 }
@@ -48,4 +61,11 @@ export const editArticleCategoryService = (
 // 删除文章分类
 export const deleteArticleCategoryService = (id: number): Promise<ApiResponse> => {
   return request.delete('/category?id=' + id)
+}
+
+// 文章列表查询
+export const articleListService = (
+  params: articleSearchItem,
+): Promise<ApiResponse<articleListDTO>> => {
+  return request.get('/article', { params: params })
 }

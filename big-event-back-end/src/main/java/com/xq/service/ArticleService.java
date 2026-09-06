@@ -1,5 +1,6 @@
 package com.xq.service;
 
+import com.xq.dto.ArticleDTO;
 import com.xq.pojo.Article;
 import com.xq.pojo.PageBean;
 
@@ -8,7 +9,7 @@ public interface ArticleService {
     void add(Article article);
 
     // 条件分页列表查询
-    PageBean<Article> list(Integer pageNum, Integer pageSize, Integer categoryId, String state);
+    PageBean<ArticleDTO> list(Integer pageNum, Integer pageSize, Integer categoryId, String state);
 
     // 根据 id 查询文章信息
     Article findById(Integer id);
