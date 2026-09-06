@@ -28,7 +28,7 @@ export interface articleListDTO {
 }
 
 export interface articleDTO {
-  id: number
+  id?: number
   title: string
   content: string
   coverImg: string
@@ -68,4 +68,9 @@ export const articleListService = (
   params: articleSearchItem,
 ): Promise<ApiResponse<articleListDTO>> => {
   return request.get('/article', { params: params })
+}
+
+// 添加文章
+export const addArticleService = (articleData: articleDTO): Promise<ApiResponse> => {
+  return request.post('/article', articleData)
 }

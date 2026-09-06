@@ -60,7 +60,11 @@
       style="margin-top: 20px; justify-content: flex-end"
     />
     <!-- 抽屉 -->
-    <AddArticleDrawer ref="articleDrawer" :categories="categories" />
+    <AddArticleDrawer
+      ref="articleDrawer"
+      :categories="categories"
+      :getArticleList="getArticleList"
+    />
   </el-card>
 </template>
 
