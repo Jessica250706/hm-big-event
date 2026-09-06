@@ -33,7 +33,7 @@ export interface articleDTO {
   content: string
   coverImg: string
   state: string
-  categoryId: number
+  categoryId?: number
   categoryName?: string
   createTime?: string
   updateTime?: string
@@ -73,4 +73,14 @@ export const articleListService = (
 // 添加文章
 export const addArticleService = (articleData: articleDTO): Promise<ApiResponse> => {
   return request.post('/article', articleData)
+}
+
+// 获取文章详情
+export const articleDetailService = (id: number): Promise<ApiResponse<articleDTO>> => {
+  return request.get('/article/detail?id=' + id)
+}
+
+// 修改文章
+export const editArticleService = (articleData: articleDTO): Promise<ApiResponse> => {
+  return request.put('/article', articleData)
 }

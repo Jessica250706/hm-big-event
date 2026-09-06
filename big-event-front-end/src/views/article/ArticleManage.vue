@@ -4,7 +4,7 @@
       <div class="header">
         <span>文章管理</span>
         <div class="extra">
-          <el-button type="primary" @click="openDrawerComponents">添加文章</el-button>
+          <el-button type="primary" @click="openAddDrawer">添加文章</el-button>
         </div>
       </div>
     </template>
@@ -39,7 +39,13 @@
       <el-table-column label="状态" prop="state"></el-table-column>
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
-          <el-button :icon="Edit" circle plain type="primary"></el-button>
+          <el-button
+            :icon="Edit"
+            circle
+            plain
+            type="primary"
+            @click="openEditDrawer(row.id)"
+          ></el-button>
           <el-button :icon="Delete" circle plain type="danger"></el-button>
         </template>
       </el-table-column>
@@ -83,7 +89,7 @@ const categories = ref<articleCategoryDTO[]>([])
 const articles = ref<articleDTO[]>([])
 // 搜索框数据
 const searchParam = ref({
-  categoryId: null as number | null, // 用户搜索时选中的分类id
+  categoryId: undefined, // 用户搜索时选中的分类id
   state: '', // 用户搜索时选中的发布状态
 })
 // 分页条数据模型
@@ -106,8 +112,14 @@ const onCurrentChange = (num: number) => {
   getArticleList()
 }
 
-const openDrawerComponents = () => {
-  articleDrawer.value?.openDrawer()
+const openAddDrawer = () => {
+  articleDrawer.value?.resetArticle()
+  articleDrawer.value?.openDrawer('添加文章')
+}
+
+const openEditDrawer = (id: number) => {
+  articleDrawer.value?.resetArticle()
+  articleDrawer.value?.openDrawer('修改文章', id)
 }
 
 const getArticleCategoryList = async () => {
@@ -117,7 +129,7 @@ const getArticleCategoryList = async () => {
 
 const resetSearchItems = () => {
   // 清空
-  searchParam.value.categoryId = null
+  searchParam.value.categoryId = undefined
   searchParam.value.state = ''
   // 刷新
   getArticleList()
@@ -127,7 +139,7 @@ const getArticleList = async () => {
   const params = {
     pageNum: pageHelper.value.pageNum,
     pageSize: pageHelper.value.pageSize,
-    categoryId: searchParam.value.categoryId ?? undefined,
+    categoryId: searchParam.value.categoryId,
     state: searchParam.value.state.length !== 0 ? searchParam.value.state : undefined,
   }
   const { data } = await articleListService(params)
