@@ -50,11 +50,11 @@
       <el-header>
         <div>
           黑马程序员：
-          <strong>东哥</strong>
+          <strong>{{ userInfoStore.info.nickname }}</strong>
         </div>
         <el-dropdown placement="bottom-end">
           <span class="el-dropdown__box">
-            <el-avatar :src="avatar" />
+            <el-avatar :src="userInfoStore.info.userPic ?? avatar" />
             <el-icon>
               <CaretBottom />
             </el-icon>
@@ -91,6 +91,19 @@ import {
   CaretBottom,
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
+import useUserInfoStore from '@/stores/userInfo'
+import { userInfoService } from '@/api/user'
+import { onMounted } from 'vue'
+
+const userInfoStore = useUserInfoStore()
+const getUserInfo = async () => {
+  const { data } = await userInfoService()
+  userInfoStore.setInfo(data)
+}
+
+onMounted(() => {
+  getUserInfo()
+})
 </script>
 
 <style lang="scss" scoped>
