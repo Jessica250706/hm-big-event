@@ -17,7 +17,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="文章封面">
-        <el-upload class="avatar-uploader" :auto-upload="false" :show-file-list="false">
+        <el-upload
+          class="avatar-uploader"
+          :auto-upload="true"
+          :show-file-list="false"
+          action="/api/upload"
+          name="file"
+          :headers="{ Authorization: tokenStore.token }"
+          :on-success="uploadSuccess"
+        >
           <img v-if="articleModel.coverImg" :src="articleModel.coverImg" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
@@ -42,11 +50,15 @@ import { Plus } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { useTokenStore } from '@/stores/token'
+import type { ApiResponse } from '@/utils/request'
 import type { articleCategoryDTO } from '@/api/article'
 
 const props = defineProps<{
   categories: articleCategoryDTO[]
 }>()
+
+const tokenStore = useTokenStore()
 
 // 抽屉是否显示
 const visibleDrawer = ref(false)
@@ -62,13 +74,17 @@ const articleModel = ref({
   state: '',
 })
 
+const uploadSuccess = (result: ApiResponse) => {
+  articleModel.value.coverImg = result.data
+  console.log('data:', result.data)
+}
+
 defineExpose({
   openDrawer,
 })
 </script>
 
 <style lang="scss" scoped>
-/* 抽屉样式 */
 .avatar-uploader {
   :deep() {
     .avatar {
