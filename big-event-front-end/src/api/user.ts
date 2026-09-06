@@ -34,3 +34,8 @@ export const userLoginService = (registerData: any): Promise<ApiResponse> => {
 export const userInfoService = (): Promise<ApiResponse<userInfoDTO>> => {
   return request.get('/user/userInfo')
 }
+
+// 修改个人信息
+export const updateUserInfoService = (userInfoData: userInfoDTO): Promise<ApiResponse> => {
+  return request.put('/user/update', userInfoData)
+}
