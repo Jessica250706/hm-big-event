@@ -4,7 +4,7 @@
       <div class="header">
         <span>文章管理</span>
         <div class="extra">
-          <el-button type="primary">添加文章</el-button>
+          <el-button type="primary" @click="openDrawerComponents">添加文章</el-button>
         </div>
       </div>
     </template>
@@ -59,31 +59,37 @@
       @current-change="onCurrentChange"
       style="margin-top: 20px; justify-content: flex-end"
     />
+    <!-- 抽屉 -->
+    <AddArticleDrawer ref="articleDrawer" :categories="categories" />
   </el-card>
 </template>
 
 <script lang="ts" setup>
 import { Edit, Delete } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
+import AddArticleDrawer from './components/AddArticleDrawer.vue'
 import { articleCategoryListService, articleListService } from '@/api/article'
 import type { articleCategoryDTO, articleDTO } from '@/api/article'
 
+type AddArticleDrawerInstance = InstanceType<typeof AddArticleDrawer>
+
 // 文章分类数据模型
 const categories = ref<articleCategoryDTO[]>([])
+// 文章列表数据模型
+const articles = ref<articleDTO[]>([])
 // 搜索框数据
 const searchParam = ref({
   categoryId: null as number | null, // 用户搜索时选中的分类id
   state: '', // 用户搜索时选中的发布状态
 })
-// 文章列表数据模型
-const articles = ref<articleDTO[]>([])
-
 // 分页条数据模型
 const pageHelper = ref({
   pageNum: 1, // 当前页
   total: 20, // 总条数
   pageSize: 3, // 每页条数
 })
+// 抽屉子组件
+const articleDrawer = ref<AddArticleDrawerInstance | null>(null)
 
 // 当每页条数发生变化
 const onSizeChange = (size: number) => {
@@ -94,6 +100,10 @@ const onSizeChange = (size: number) => {
 const onCurrentChange = (num: number) => {
   pageHelper.value.pageNum = num
   getArticleList()
+}
+
+const openDrawerComponents = () => {
+  articleDrawer.value?.openDrawer()
 }
 
 const getArticleCategoryList = async () => {
