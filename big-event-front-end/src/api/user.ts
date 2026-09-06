@@ -39,3 +39,10 @@ export const userInfoService = (): Promise<ApiResponse<userInfoDTO>> => {
 export const updateUserInfoService = (userInfoData: userInfoDTO): Promise<ApiResponse> => {
   return request.put('/user/update', userInfoData)
 }
+
+// 修改头像
+export const updateUserAvatarService = (avatarUrl: string): Promise<ApiResponse> => {
+  const params = new URLSearchParams()
+  params.append('avatarUrl', avatarUrl)
+  return request.patch('/user/updateAvatar', params)
+}
