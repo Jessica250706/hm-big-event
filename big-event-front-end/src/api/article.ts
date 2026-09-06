@@ -15,6 +15,17 @@ export interface addArticleCategoryDTO {
   categoryAlias: string
 }
 
+export interface articleDTO {
+  id: number
+  title: string
+  content: string
+  coverImg: string
+  state: string
+  categoryId: number
+  createTime?: string
+  updateTime?: string
+}
+
 // 文章分类列表查询
 export const articleCategoryListService = (): Promise<ApiResponse<articleCategoryDTO[]>> => {
   return request.get('/category')
