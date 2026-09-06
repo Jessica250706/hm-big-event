@@ -2,16 +2,16 @@
   <!-- 抽屉 -->
   <el-drawer v-model="visibleDrawer" :title="drawerTitle" direction="rtl" size="50%">
     <!-- 添加/修改文章表单 -->
-    <el-form :model="articleModel" label-width="100px">
-      <el-form-item label="文章标题">
+    <el-form :model="articleModel" label-width="100px" :rules="rules">
+      <el-form-item label="文章标题" prop="title">
         <el-input v-model="articleModel.title" placeholder="请输入标题" />
       </el-form-item>
-      <el-form-item label="文章分类">
+      <el-form-item label="文章分类" prop="categoryId">
         <el-select placeholder="请选择" v-model="articleModel.categoryId">
           <el-option v-for="c in categories" :key="c.id" :label="c.categoryName" :value="c.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="文章封面">
+      <el-form-item label="文章封面" prop="coverImg">
         <el-upload
           class="avatar-uploader"
           :auto-upload="true"
@@ -27,7 +27,7 @@
           </el-icon>
         </el-upload>
       </el-form-item>
-      <el-form-item label="文章内容">
+      <el-form-item label="文章内容" prop="content">
         <div class="editor">
           <quill-editor theme="snow" v-model:content="articleModel.content" contentType="html" />
         </div>
@@ -42,14 +42,15 @@
 
 <script lang="ts" setup>
 import { Plus } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useTokenStore } from '@/stores/token'
 import type { ApiResponse } from '@/utils/request'
 import { addArticleService, articleDetailService, editArticleService } from '@/api/article'
 import type { articleCategoryDTO, articleDTO } from '@/api/article'
-import { ElMessage } from 'element-plus'
 
 type DrawerMode = '添加文章' | '修改文章'
 
@@ -71,6 +72,16 @@ const initialArticle = {
   state: '',
 }
 const articleModel = ref<articleDTO>({ ...initialArticle })
+
+const rules = reactive<FormRules>({
+  title: [
+    { required: true, message: '请输入文章标题', trigger: 'blur' },
+    { pattern: /^\S{1,10}$/, message: '标题长度为1~10位非空字符', trigger: 'blur' },
+  ],
+  content: [{ required: true, message: '请输入文章正文', trigger: 'blur' }],
+  coverImg: [{ required: true, message: '请输入文章封面图像地址', trigger: 'blur' }],
+  categoryId: [{ required: true, message: '请输入文章分类ID', trigger: 'blur' }],
+})
 
 const resetArticle = () => {
   articleModel.value = { ...initialArticle }
