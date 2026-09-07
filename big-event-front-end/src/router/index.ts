@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
-import Layout from '@/layout/index.vue'
+import Layout from '@/layout/Index.vue'
 import ArticleCategory from '@/views/article/ArticleCategory.vue'
 import ArticleManage from '@/views/article/ArticleManage.vue'
 import UserAvatar from '@/views/user/UserAvatar.vue'
