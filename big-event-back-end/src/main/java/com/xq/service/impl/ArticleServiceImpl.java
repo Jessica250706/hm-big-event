@@ -1,0 +1,82 @@
+package com.xq.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.xq.dto.ArticleDTO;
+import com.xq.mapper.ArticleMapper;
+import com.xq.pojo.Article;
+import com.xq.pojo.PageBean;
+import com.xq.service.ArticleService;
+import com.xq.utils.UserContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class ArticleServiceImpl implements ArticleService {
+
+    @Autowired
+    private ArticleMapper articleMapper;
+
+    @Override
+    public void add(Article article) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        article.setCreateUser(userId);
+        article.setCreateTime(LocalDateTime.now());
+        article.setUpdateTime(LocalDateTime.now());
+        articleMapper.add(article);
+    }
+
+    @Override
+    public PageBean<ArticleDTO> list(Integer pageNum, Integer pageSize, Integer categoryId, String state) {
+        // 1.创建 PageBean 对象
+        PageBean<ArticleDTO> pageBean = new PageBean<>();
+
+        // 2.开启分页查询
+        PageHelper.startPage(pageNum, pageSize);
+
+        // 3.调用 mapper 完成查询
+        Integer userId = UserContextUtil.getCurrentUserId();
+        List<ArticleDTO> as = articleMapper.list(userId, categoryId, state);
+        // Page 中提供了方法，可以获取 PageHelper 分页查询后，得到的总记录条数和当前页数据
+        Page<ArticleDTO> p = (Page<ArticleDTO>) as;
+
+        // 4.把数据填充到 PageBean 对象中
+        pageBean.setTotal(p.getTotal());
+        pageBean.setItems(p.getResult());
+
+        return pageBean;
+    }
+
+    @Override
+    public Article findById(Integer id) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        Article article = articleMapper.findById(id, userId);
+        if (article == null) {
+            throw new RuntimeException("文章不存在或无权查看");
+        }
+        return article;
+    }
+
+    @Override
+    public void update(Article article) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        article.setCreateUser(userId);
+        article.setUpdateTime(LocalDateTime.now());
+        int rows = articleMapper.update(article);
+        if (rows == 0) {
+            throw new RuntimeException("文章不存在或无权修改");
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Integer userId = UserContextUtil.getCurrentUserId();
+        int rows = articleMapper.delete(id, userId);
+        if (rows == 0) {
+            throw new RuntimeException("文章不存在或无权删除");
+        }
+    }
+}

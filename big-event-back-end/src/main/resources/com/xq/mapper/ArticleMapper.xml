@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.mapper.ArticleMapper">
+  <!-- 动态 SQL -->
+  <select id="list" resultType="com.xq.dto.ArticleDTO">
+    select
+      a.id,
+      a.title,
+      a.content,
+      a.cover_img,
+      a.state,
+      a.category_id,
+      c.category_name as categoryName,
+      a.create_user,
+      a.create_time,
+      a.update_time
+    from article a
+    left join category c on a.category_id = c.id
+    <where>
+      <if test="categoryId != null">
+        a.category_id = #{categoryId}
+      </if>
+
+      <if test="state != null">
+        and a.state = #{state}
+      </if>
+
+      and a.create_user = #{userId}
+    </where>
+  </select>
+</mapper>
